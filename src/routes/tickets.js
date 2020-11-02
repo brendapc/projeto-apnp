@@ -18,6 +18,16 @@ router.get('/:destination', (req, res) => {
     })
 })
 
+router.get('/user/:id', (req, res )=>{
+    console.log(req.params.id)
+    const id = req.params.id
+    const sql = 'SELECT passagens.numero, passagens.loc_chegada, usuarios.name, usuarios.id  FROM passagens, usuarios WHERE usuarios.id = passagens.id_user AND passagens.id_user = ?';
+    db.query(sql, id , (err, result)=>{
+        if(err) throw err
+        res.status(200).json(result)
+    })
+})
+
 router.post('/', (req, res)=>{
     const sql = 'INSERT INTO passagens VALUES (null, ?,?,?,?,?,?,?)'
     db.query(sql, [req.body.numero, req.body.cia, req.body.loc_partida, req.body.loc_chegada, req.body.data_partida, req.body.data_chegada, req.body.preco ],
